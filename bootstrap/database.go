@@ -2,7 +2,7 @@ package bootstrap
 
 import (
 	"fmt"
-	"goWeb/DB"
+	"goWeb/DataBase"
 
 	"time"
 
@@ -29,13 +29,13 @@ func SetupDB() {
 	})
 
 	// 连接数据库，并设置 GORM 的日志模式
-	DB.Connect(dbConfig, logger.Default.LogMode(logger.Info))
+	DataBase.Connect(dbConfig, logger.Default.LogMode(logger.Info))
 
 	// 设置最大连接数
-	DB.SQLDB.SetMaxOpenConns(10)
+	DataBase.SQLDB.SetMaxOpenConns(10)
 	// 设置最大空闲连接数
-	DB.SQLDB.SetMaxIdleConns(5)
+	DataBase.SQLDB.SetMaxIdleConns(5)
 	// 设置每个链接的过期时间
-	DB.SQLDB.SetConnMaxLifetime(time.Duration(24) * time.Hour) //一天
+	DataBase.SQLDB.SetConnMaxLifetime(time.Duration(24) * time.Hour) //一天
 
 }
