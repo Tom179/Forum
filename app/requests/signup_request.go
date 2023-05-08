@@ -8,6 +8,9 @@ import (
 type SignupPhoneExistRequest struct {
 	Phone string `json:"phone,omitempty" valid:"phone"` //valid是一个常用的第三方验证库，可以定义结构体字段的验证规则，如果不符合，验证库会返回相应的错误信息
 }
+type SignupEmailExistRequest struct {
+	Email string `json:"email,omitempty" valid:"email"`
+}
 
 func ValidateSignupPhoneExist(data interface{}, c *gin.Context) map[string][]string {
 	//传入请求结构体，返回ValidateStruct函数
@@ -21,6 +24,31 @@ func ValidateSignupPhoneExist(data interface{}, c *gin.Context) map[string][]str
 		"phone": []string{
 			"required:手机号为必填项，参数名称 phone",
 			"digits:手机号长度必须为 11 位的数字",
+		},
+	}
+	// 配置初始化
+	opts := govalidator.Options{
+		Data:          data,
+		Rules:         rules,
+		TagIdentifier: "valid", // 模型中的 Struct 标签标识符
+		Messages:      messages,
+	}
+
+	// 开始验证
+	return govalidator.New(opts).ValidateStruct()
+}
+
+func ValidateSignupEmailExist(data interface{}, c *gin.Context) map[string][]string {
+
+	rules := govalidator.MapData{
+		"email": []string{"required", "min:4", "max:30", "email"},
+	}
+	messages := govalidator.MapData{
+		"email": []string{
+			"required:Email 为必填项",
+			"min:Email 长度需大于 4",
+			"max:Email 长度需小于 30",
+			"email:Email 格式不正确，请提供有效的邮箱地址",
 		},
 	}
 	// 配置初始化
