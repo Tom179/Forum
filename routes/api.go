@@ -14,11 +14,12 @@ func RegistAPIRouters(r *gin.Engine) {
 				"Hello": "goWEb!!!",
 			})
 		})
-		authGroup := v1.Group("/auth")
+		authGroup := v1.Group("/auth") //认证组
 		{
-			suc := new(auth.SignupController)
+			suc := new(auth.SignupController) //创建对象，该对象封装了函数
 			authGroup.POST("/signup/phone/exist", suc.IsPhoneExist)
-		}
+			//👆查询手机号是否存在接口，传入的是查询手机号是否存在的处理函数（传入c *gin.Context），该函数再封装的查询工具函数
 
+		}
 	}
 }
