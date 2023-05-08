@@ -11,7 +11,7 @@ func SetupRoute(r *gin.Engine) { //传入engine
 
 }
 func registGlobalMiddleWare(r *gin.Engine) {
-	r.Use(
+	r.Use( //注册全局中间件到r引擎上，这样写是为了方便后续添加其他中间件
 		gin.Logger(),
 		gin.Recovery(),
 	)
