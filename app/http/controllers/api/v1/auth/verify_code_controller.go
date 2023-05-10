@@ -2,11 +2,10 @@ package auth
 
 import (
 	"fmt"
-	v1 "goWeb/app/http/controllers/api/v1"
-	"goWeb/captcha"
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	v1 "goWeb/app/http/controllers/api/v1"
+	"goWeb/app/response"
+	"goWeb/captcha"
 )
 
 // VerifyCodeController 用户控制器
@@ -17,14 +16,17 @@ type VerifyCodeController struct {
 // ShowCaptcha 显示图片验证码
 func (vc *VerifyCodeController) ShowCaptcha(c *gin.Context) {
 	// 生成验证码
-	id, b64s, err := captcha.NewCaptcha().GenerateCaptcha()
-	// 记录错误日志，因为验证码是用户的入口，出错时应该记 error 等级的日志
-	//logger.LogIf(err)
+	id, b64s, err := captcha.NewCaptcha().GenerateCaptcha() //1.先是绑定到redis库中2.生成id,验证码的值并存储到redis中，最后生成图片，返回string中的后段id、和图片的base64编码
+	//logger.LogIf(err)// 记录错误日志，因为验证码是用户的入口，出错时应该记 error 等级的日志
 	if err != nil {
 		fmt.Println(err)
 	}
 	// 返回给用户
-	c.JSON(http.StatusOK, gin.H{
+	/*c.JSON(http.StatusOK, gin.H{
+		"captcha_id":    id,
+		"captcha_image": b64s,
+	})*/
+	response.JSON(c, gin.H{ //简单封装
 		"captcha_id":    id,
 		"captcha_image": b64s,
 	})

@@ -13,7 +13,7 @@ type RedisStore struct {
 }
 
 // Set 实现 base64Captcha.Store interface 的 Set 方法
-func (s *RedisStore) Set(key string, value string) error {
+func (s *RedisStore) Set(key string, value string) error { //实现set方法也就是自定义存储操作
 
 	ExpireTime := time.Minute * time.Duration(10080) //过期时间
 	if ok := s.RedisClient.Set(s.KeyPrefix+key, value, ExpireTime); !ok {

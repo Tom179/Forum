@@ -1,4 +1,4 @@
-// Package redis 工具包
+// Package redis 工具包：连接，增删查改
 package redis
 
 import (
@@ -30,7 +30,7 @@ func ConnectRedis(address string, username string, password string, db int) {
 }
 
 // NewClient 创建一个新的 redis 连接
-func NewClient(address string, username string, password string, db int) *RedisClient {
+func NewClient(address string, username string, password string, db int) *RedisClient { //传入用户名，密码
 
 	// 初始化自定的 RedisClient 实例
 	rds := &RedisClient{}

@@ -5,7 +5,7 @@ import (
 	v1 "goWeb/app/http/controllers/api/v1"
 	"goWeb/app/models/user"
 	"goWeb/app/requests"
-	"net/http"
+	"goWeb/app/response"
 )
 
 type SignupController struct { //?继承自baseAPIController 有什么用？
@@ -20,7 +20,10 @@ func (sc *SignupController) IsPhoneExist(c *gin.Context) { //处理函数:需要
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{ //如果格式无误且成功获取到请求，查库
+	/*c.JSON(http.StatusOK, gin.H{ //如果格式无误且成功获取到请求，查库
+		"exist": user.IsPhoneExist(request.Phone),
+	})*/
+	response.JSON(c, gin.H{
 		"exist": user.IsPhoneExist(request.Phone),
 	})
 
@@ -43,14 +46,17 @@ func (sc *SignupController) IsEmailExist(c *gin.Context) {
 			})
 			fmt.Println(errs)
 			return
-		}*/
+		}*/ //写到了👇以下函数中
 
 	if ok := requests.Validate(c, &request, requests.SignupEmailExist); !ok {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{ //如果成功获取到请求，验证,传入一个string
+	/*c.JSON(http.StatusOK, gin.H{ //如果成功获取到请求，验证,传入一个string
 		"exist": user.IsEmailExist(request.Email), //查库
+	})*/
+	response.JSON(c, gin.H{
+		"exist": user.IsEmailExist(request.Email),
 	})
 
 }
