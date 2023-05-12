@@ -11,7 +11,7 @@ import (
 type SMTP struct{}
 
 // Send 实现 email.Driver interface 的 Send 方法
-func (s *SMTP) Send(email Email, config map[string]string) bool {
+func (s *SMTP) Send(email Email, config map[string]string) bool { //传入Email结构体
 
 	e := emailPKG.NewEmail()
 

@@ -36,8 +36,7 @@ func (vc *VerifyCodeController) ShowCaptcha(c *gin.Context) {
 
 // SendUsingEmail 发送 Email 验证码
 func (vc *VerifyCodeController) SendUsingEmail(c *gin.Context) {
-
-	// 1. 验证表单
+	// 1. 验证表单（填写图片验证码的表单，如果正确，再发送邮件）
 	request := requests.VerifyCodeEmailRequest{}
 	if ok := requests.Validate(c, &request, requests.VerifyCodeEmail); !ok {
 		return

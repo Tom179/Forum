@@ -39,9 +39,7 @@ func (vc *VerifyCode) CheckAnswer(key string, answer string) bool {
 	fmt.Println("检查验证码:", answer)
 
 	// 方便开发，在非生产环境下，具备特殊前缀的手机号和 Email后缀，会直接验证成功
-	/*if !app.IsProduction() &&
-		(strings.HasSuffix(key, config.GetString("verifycode.debug_email_suffix")) ||
-			strings.HasPrefix(key, config.GetString("verifycode.debug_phone_prefix"))) {
+	/*if strings.HasSuffix(key, "testing.com") {
 		return true
 	}*/
 
@@ -94,10 +92,10 @@ func (vc *VerifyCode) SendEmail(email string) error {
 
 	content := fmt.Sprintf("<h1>您的 Email 验证码是 %v </h1>", code)
 	// 发送邮件
-	mail.NewMailer().Send(mail.Email{
+	mail.NewMailer().Send(mail.Email{ //Send方法
 		From: mail.From{
 			Address: "1537946665@qq.com",
-			Name:    "Teeeest",
+			Name:    "QY",
 		},
 		To:      []string{email},
 		Subject: "Email 验证码",

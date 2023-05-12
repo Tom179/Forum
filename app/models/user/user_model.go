@@ -1,6 +1,9 @@
 package user
 
-import "goWeb/app/models"
+import (
+	"goWeb/DataBase"
+	"goWeb/app/models"
+)
 
 type User struct { //结构体大写！！
 	models.BaseModel
@@ -14,6 +17,10 @@ type User struct { //结构体大写！！
 
 	//如果模型中没有定义TableName方法，GORM会自动根据模型名生成对应的表名，生成规则为将模型名转为复数形式，然后在末尾添加"s"
 	//↑所以该模型对应的是users的表
+}
+
+func (userModel *User) Create() {
+	DataBase.DB.Create(&userModel)
 }
 
 func (User) TableName() string {

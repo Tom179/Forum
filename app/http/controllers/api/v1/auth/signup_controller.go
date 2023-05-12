@@ -60,3 +60,38 @@ func (sc *SignupController) IsEmailExist(c *gin.Context) {
 	})
 
 }
+
+/*
+
+
+
+
+
+
+ */
+// SignupUsingEmail 使用 Email + 验证码进行注册
+func (sc *SignupController) SignupUsingEmail(c *gin.Context) {
+
+	// 1. 验证表单
+	request := requests.SignupUsingEmailRequest{}
+	if ok := requests.Validate(c, &request, requests.SignupUsingEmail); !ok {
+		return
+	} //注册验证的是邮件验证码，而不是图片验证码
+	//（注）redis的后段key就是email，所以验证邮件验证码就是检验key(GoWeb:verifycode:summer)对应的value
+
+	// 2. 验证成功，创建数据
+	userModel := user.User{
+		Name:     request.Name,
+		Email:    request.Email,
+		Password: request.Password,
+	}
+	userModel.Create()
+
+	if userModel.ID > 0 {
+		response.CreatedJSON(c, gin.H{
+			"data": userModel,
+		})
+	} else {
+		response.Abort500(c, "创建用户失败，请稍后尝试~")
+	}
+}

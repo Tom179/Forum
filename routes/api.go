@@ -25,6 +25,7 @@ func RegistAPIRouters(r *gin.Engine) {
 			//创建VerifyCodeController的实例
 			authGroup.POST("/verify-codes/captcha", vcc.ShowCaptcha) //图片验证码接口
 			authGroup.POST("/verify-codes/email", vcc.SendUsingEmail)
+			authGroup.POST("/signup/using-email", suc.SignupUsingEmail)
 		}
 	}
 }
