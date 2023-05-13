@@ -6,6 +6,7 @@ import (
 	"goWeb/app/models/user"
 	"goWeb/app/requests"
 	"goWeb/app/response"
+	"goWeb/jwt"
 )
 
 type SignupController struct { //?继承自baseAPIController 有什么用？
@@ -76,8 +77,7 @@ func (sc *SignupController) SignupUsingEmail(c *gin.Context) {
 	request := requests.SignupUsingEmailRequest{}
 	if ok := requests.Validate(c, &request, requests.SignupUsingEmail); !ok {
 		return
-	} //注册验证的是邮件验证码，而不是图片验证码
-	//（注）redis的后段key就是email，所以验证邮件验证码就是检验key(GoWeb:verifycode:summer)对应的value
+	}
 
 	// 2. 验证成功，创建数据
 	userModel := user.User{
@@ -86,10 +86,12 @@ func (sc *SignupController) SignupUsingEmail(c *gin.Context) {
 		Password: request.Password,
 	}
 	userModel.Create()
-
+	//jwt
 	if userModel.ID > 0 {
+		token := jwt.NewJWT().IssueToken(userModel.GetStringID(), userModel.Name) //jwt
 		response.CreatedJSON(c, gin.H{
-			"data": userModel,
+			"token": token,
+			"data":  userModel,
 		})
 	} else {
 		response.Abort500(c, "创建用户失败，请稍后尝试~")
