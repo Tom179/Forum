@@ -2,6 +2,7 @@ package user
 
 import (
 	"goWeb/DataBase"
+	"goWeb/Hash"
 	"goWeb/app/models"
 )
 
@@ -31,3 +32,8 @@ func (User) TableName() string {
 //这样做可以避免代码冗余，并提高代码的可维护性和可复用性。
 //在这段代码中，User结构体组合了两个已有的模型结构体：
 //这两个模型结构体都定义了一些公共的字段和方法，User结构体继承了它们的公共字段和方法，并添加了自己的定制字段，比如Name、Email、Phone和Password。
+
+// ComparePassword 密码是否正确
+func (userModel *User) ComparePassword(_password string) bool {
+	return Hash.BcryptCheck(_password, userModel.Password)
+}
