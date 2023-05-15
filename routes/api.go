@@ -26,6 +26,9 @@ func RegistAPIRouters(r *gin.Engine) {
 			authGroup.POST("/verify-codes/captcha", vcc.ShowCaptcha) //图片验证码接口
 			authGroup.POST("/verify-codes/email", vcc.SendUsingEmail)
 			authGroup.POST("/signup/using-email", suc.SignupUsingEmail)
+
+			lgc := new(auth.LoginController)
+			authGroup.POST("/login/using-password", lgc.LoginByPassword)
 		}
 	}
 }
