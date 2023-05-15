@@ -18,5 +18,6 @@ type CommonTimestampsField struct {
 }
 
 func (a BaseModel) GetStringID() string {
+	//fmt.Println(a.ID)
 	return cast.ToString(a.ID)
 }

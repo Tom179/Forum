@@ -12,6 +12,11 @@ func main() {
 	bootstrap.SetupRedis()
 	bootstrap.SetupRoute(r) //初始化路由，包括中间件
 
+	/*r.GET("/test_auth", MiddleWares.AuthJWT(), func(c *gin.Context) { //中间件测试
+		userModel := auth.CurrentUser(c)
+		response.Data(c, userModel)
+	    中间件测试
+	})*/
 	//fmt.Println(captcha.NewCaptcha().VerifyCaptcha("07d7ADH7Fn7cvV4Vf9nM", "743529")) //检测验证码函数
 
 	err := r.Run(":3000") //最好写到配置文件中端口（数据库连接，密钥......都不要写死）

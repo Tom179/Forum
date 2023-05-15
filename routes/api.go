@@ -20,13 +20,13 @@ func RegistAPIRouters(r *gin.Engine) {
 			authGroup.POST("/signup/phone/exist", suc.IsPhoneExist)
 			//👆查询手机号是否存在接口，传入的是查询手机号是否存在的处理函数（传入c *gin.Context），该函数再封装的查询工具函数
 			authGroup.POST("signup/email/exist", suc.IsEmailExist)
-
 			vcc := new(auth.VerifyCodeController)
 			//创建VerifyCodeController的实例
 			authGroup.POST("/verify-codes/captcha", vcc.ShowCaptcha) //图片验证码接口
 			authGroup.POST("/verify-codes/email", vcc.SendUsingEmail)
 			authGroup.POST("/signup/using-email", suc.SignupUsingEmail)
 
+			//创建LoginController的实例
 			lgc := new(auth.LoginController)
 			authGroup.POST("/login/using-password", lgc.LoginByPassword)
 		}

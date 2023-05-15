@@ -30,3 +30,8 @@ func GetByMulti(loginID string) (userModel User) { //满足其中一个即可
 		First(&userModel)
 	return
 }
+
+func Get(idstr string) (userModel User) {
+	DataBase.DB.Where("id", idstr).First(&userModel)
+	return
+}
