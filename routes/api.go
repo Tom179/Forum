@@ -2,18 +2,16 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
+	"goWeb/app/http/MiddleWares"
 	"goWeb/app/http/controllers/api/v1/auth"
-	"net/http"
 )
 
 func RegistAPIRouters(r *gin.Engine) {
 	v1 := r.Group("v1")
+	v1.Use(MiddleWares.LimitIP("200-H"))
+
 	{
-		v1.GET("/", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{
-				"Hello": "goWEb!!!",
-			})
-		})
+
 		authGroup := v1.Group("/auth") //认证组
 		{
 			suc := new(auth.SignupController) //创建对象，该对象封装了函数
