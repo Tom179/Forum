@@ -2,7 +2,7 @@ package bootstrap
 
 import (
 	"fmt"
-	"goWeb/redis"
+	"goWeb/pkg/redis"
 )
 
 // SetupRedis 初始化 Redis

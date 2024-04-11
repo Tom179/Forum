@@ -3,7 +3,7 @@ package validators
 
 import (
 	"goWeb/pkg/captcha"
-	"goWeb/verifycode"
+	"goWeb/pkg/verifycode"
 )
 
 // ValidateCaptcha 自定义规则，验证『图片验证码』

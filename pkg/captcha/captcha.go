@@ -4,7 +4,7 @@ package captcha
 import (
 	"github.com/mojocn/base64Captcha"
 	"goWeb/pkg/config"
-	"goWeb/redis"
+	"goWeb/pkg/redis"
 	"sync"
 )
 

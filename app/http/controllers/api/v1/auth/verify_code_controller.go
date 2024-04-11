@@ -7,7 +7,7 @@ import (
 	"goWeb/app/requests"
 	"goWeb/pkg/captcha"
 	"goWeb/pkg/response"
-	"goWeb/verifycode"
+	"goWeb/pkg/verifycode"
 )
 
 // VerifyCodeController 用户控制器

@@ -2,6 +2,7 @@
 package mail
 
 import (
+	"goWeb/pkg/config"
 	"sync"
 )
 
@@ -39,13 +40,5 @@ func NewMailer() *Mailer {
 }
 
 func (mailer *Mailer) Send(email Email) bool {
-
-	smtpConfig := map[string]string{
-		"host":     "localhost",
-		"port":     "1025", //
-		"username": "",
-		"password": "",
-	}
-
-	return mailer.Driver.Send(email, smtpConfig)
+	return mailer.Driver.Send(email, config.GetStringMapString("mail.smtp"))
 }

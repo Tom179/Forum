@@ -1,7 +1,9 @@
 package verifycode
 
 import (
-	"goWeb/redis"
+	"goWeb/pkg/app"
+	"goWeb/pkg/config"
+	"goWeb/pkg/redis"
 	"time"
 )
 
@@ -14,8 +16,11 @@ type RedisStore struct {
 // Set 实现 verifycode.Store interface 的 Set 方法
 func (s *RedisStore) Set(key string, value string) bool {
 
-	ExpireTime := time.Minute * time.Duration(10000000)
+	ExpireTime := time.Minute * time.Duration(config.GetInt64("verifycode.expire_time"))
 	// 本地环境方便调试
+	if app.IsLocal() {
+		ExpireTime = time.Minute * time.Duration(config.GetInt64("verifycode.debug_expire_time"))
+	}
 
 	return s.RedisClient.Set(s.KeyPrefix+key, value, ExpireTime)
 }

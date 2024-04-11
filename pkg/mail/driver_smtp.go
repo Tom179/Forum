@@ -2,6 +2,7 @@ package mail
 
 import (
 	"fmt"
+	"goWeb/pkg/logger"
 	"net/smtp"
 
 	emailPKG "github.com/jordan-wright/email"
@@ -11,7 +12,7 @@ import (
 type SMTP struct{}
 
 // Send 实现 email.Driver interface 的 Send 方法
-func (s *SMTP) Send(email Email, config map[string]string) bool { //传入Email结构体
+func (s *SMTP) Send(email Email, config map[string]string) bool {
 
 	e := emailPKG.NewEmail()
 
@@ -23,8 +24,7 @@ func (s *SMTP) Send(email Email, config map[string]string) bool { //传入Email�
 	e.Text = email.Text
 	e.HTML = email.HTML
 
-	//logger.DebugJSON("发送邮件", "发件详情", e)//日志
-	fmt.Println("发送邮件：", e)
+	logger.DebugJSON("发送邮件", "发件详情", e)
 
 	err := e.Send(
 		fmt.Sprintf("%v:%v", config["host"], config["port"]),
@@ -37,12 +37,10 @@ func (s *SMTP) Send(email Email, config map[string]string) bool { //传入Email�
 		),
 	)
 	if err != nil {
-		//logger.ErrorString("发送邮件", "发件出错", err.Error())//日志
-		fmt.Println("发送邮件错误", err.Error())
+		logger.ErrorString("发送邮件", "发件出错", err.Error())
 		return false
 	}
 
-	//logger.DebugString("发送邮件", "发件成功", "")//日志
-	fmt.Println("发送邮件成功")
+	logger.DebugString("发送邮件", "发件成功", "")
 	return true
 }

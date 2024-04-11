@@ -3,7 +3,7 @@ package limiter
 
 import (
 	"fmt"
-	"goWeb/redis"
+	"goWeb/pkg/redis"
 	"strings"
 
 	"github.com/gin-gonic/gin"

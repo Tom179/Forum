@@ -2,7 +2,7 @@ package captcha
 
 import (
 	"errors"
-	"goWeb/redis"
+	"goWeb/pkg/redis"
 	"time"
 )
 
