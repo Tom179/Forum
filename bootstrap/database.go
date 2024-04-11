@@ -5,12 +5,12 @@ import (
 	"goWeb/app/models/user"
 	"goWeb/pkg/config"
 	"goWeb/pkg/database"
+	"goWeb/pkg/logger"
 
 	"time"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 // SetupDB 初始化数据库和 ORM
@@ -32,8 +32,8 @@ func SetupDB() { //请换为用配置文件的形式
 	})
 
 	// 连接数据库，并设置 GORM 的日志模式
-	database.Connect(dbConfig, logger.Default.LogMode(logger.Info)) //给DB赋值，之后再访问DataBase包的时候可以直接使用DB
-	database.DB.AutoMigrate(&user.User{})                           //自动建表，填入多个参数同样能一次性建多个表
+	database.Connect(dbConfig, logger.NewGormLogger()) /*logger.Default.LogMode(logger.Info)更换自定义*/ //给DB赋值，之后再访问DataBase包的时候可以直接使用DB
+	database.DB.AutoMigrate(&user.User{})              //自动建表，填入多个参数同样能一次性建多个表
 
 	database.SQLDB.SetMaxOpenConns(10)                               // 设置最大连接数
 	database.SQLDB.SetMaxIdleConns(5)                                // 设置最大空闲连接数
