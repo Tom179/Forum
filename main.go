@@ -24,10 +24,13 @@ func main() {
 	flag.Parse()
 
 	config.InitConfig(env) //根据命令行传入的参数加载配置。（导入config包时调用init函数，新建viper对象，设置读取配置文件的类型、后缀等）
-	fmt.Println("读取配置文件")
+	/*	fmt.Println("读取配置文件")
 
-	prt := config.InternalGet("app.port") //证明viper中的多级配置，不论是yaml和map键值都可以通过'.'的方式来获取多级配置
-	fmt.Println("读取到的app.port为", prt)
+		prt := config.InternalGet("app.port") //证明viper中的多级配置，不论是yaml和map键值都可以通过'.'的方式来获取多级配置
+		fmt.Println("读取到的app.port为", prt)
+	*/
+
+	bootstrap.SetupLogger() // 初始化 Logger
 
 	r := gin.New()
 	bootstrap.SetupDB()     //初始化数据库
