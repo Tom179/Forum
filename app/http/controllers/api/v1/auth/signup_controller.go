@@ -25,29 +25,13 @@ func (sc *SignupController) IsPhoneExist(c *gin.Context) { //处理函数:需要
 		"exist": user.IsPhoneExist(request.Phone),
 	})*/
 	response.JSON(c, gin.H{
-		"exist": user.IsPhoneExist(request.Phone),
+		"exist": user.IsPhoneExist(request.Phone), //验证函数
 	})
 
 }
 
 func (sc *SignupController) IsEmailExist(c *gin.Context) {
 	request := requests.SignupEmailExistRequest{} //创建结构体
-	/*	if err := c.ShouldBindJSON(&request); err != nil {
-			c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{
-				"errors": err,
-			}) //
-			fmt.Println(err)
-			return
-		}
-		errs := requests.SignupEmailExist(&request, c) //验证请求格式
-
-		if len(errs) > 0 { //不能采用errs！=nil因为就算没错，也是一个长度为0的空切片，而不是nil
-			c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{
-				"errors": errs,
-			})
-			fmt.Println(errs)
-			return
-		}*/ //写到了👇以下函数中
 
 	if ok := requests.Validate(c, &request, requests.SignupEmailExist); !ok {
 		return
@@ -59,26 +43,18 @@ func (sc *SignupController) IsEmailExist(c *gin.Context) {
 	response.JSON(c, gin.H{
 		"exist": user.IsEmailExist(request.Email),
 	})
-
 }
 
 /*
-
-
-
-
-
-
  */
 // SignupUsingEmail 使用 Email + 验证码进行注册
 func (sc *SignupController) SignupUsingEmail(c *gin.Context) {
 
-	// 1. 验证表单
 	request := requests.SignupUsingEmailRequest{}
-	if ok := requests.Validate(c, &request, requests.SignupUsingEmail); !ok {
+
+	if ok := requests.Validate(c, &request, requests.SignupUsingEmail); !ok { // 1. 验证表单
 		return
 	}
-
 	// 2. 验证成功，创建数据
 	userModel := user.User{
 		Name:     request.Name,
@@ -88,7 +64,7 @@ func (sc *SignupController) SignupUsingEmail(c *gin.Context) {
 	userModel.Create()
 	//jwt
 	if userModel.ID > 0 {
-		token := jwt.NewJWT().IssueToken(userModel.GetStringID(), userModel.Name) //jwt
+		token := jwt.NewJWT().CreatToken(userModel.GetStringID(), userModel.Name) //jwt
 		response.CreatedJSON(c, gin.H{
 			"token": token,
 			"data":  userModel,

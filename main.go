@@ -1,15 +1,37 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"goWeb/bootstrap"
+	btsConfig "goWeb/config" //init()
+	"goWeb/pkg/config"       //btsConfig和config的区别？这两个配置分别配置了什么信息？
 )
 
+func init() {
+	// 为了调用root/config的init()函数，有必要吗？不是导包就行？
+	btsConfig.Initialize()
+}
+
 func main() {
+	//map1 := make(map[string]string)
+	//map1["key1"] = "what"
+	//fmt.Println(map1."key1")
+
+	var env string
+	flag.StringVar(&env, "env", "", "加载 .env 文件，如 --env=testing 加载的是 .env.testing 文件")
+	flag.Parse()
+
+	config.InitConfig(env) //根据命令行传入的参数加载配置。（导入config包时调用init函数，新建viper对象，设置读取配置文件的类型、后缀等）
+	fmt.Println("读取配置文件")
+
+	prt := config.InternalGet("app.port")
+	fmt.Println("读取到的app.port为", prt)
+
 	r := gin.New()
-	bootstrap.SetupDB() //初始化数据库
-	bootstrap.SetupRedis()
+	bootstrap.SetupDB()     //初始化数据库
+	bootstrap.SetupRedis()  //初始化redis
 	bootstrap.SetupRoute(r) //初始化路由，包括中间件
 
 	/*r.GET("/test_auth", MiddleWares.AuthJWT(), func(c *gin.Context) { //中间件测试
@@ -22,9 +44,9 @@ func main() {
 	})*///中间件测试：游客身份，哪些路由只有游客才能访问，直接为其添加中间件即可。
 	//fmt.Println(captcha.NewCaptcha().VerifyCaptcha("07d7ADH7Fn7cvV4Vf9nM", "743529")) //检测验证码函数
 
-	err := r.Run(":3000") //最好写到配置文件中端口（数据库连接，密钥......都不要写死）
+	err := r.Run(":" + config.Get("app.port"))
 	if err != nil {
+		// 错误处理，端口被占用了或者其他错误
 		fmt.Println(err.Error())
 	}
-
 }

@@ -28,7 +28,7 @@ type JWT struct {
 	MaxRefresh time.Duration
 }
 
-// JWTCustomClaims 自定义载荷
+// JWTCustomClaims 自定义载荷:userID，用户名、过期时间
 type JWTCustomClaims struct {
 	UserID       string `json:"user_id"`
 	UserName     string `json:"user_name"`
@@ -42,6 +42,7 @@ type JWTCustomClaims struct {
 	// - aud (audience)：观众，相当于接受者
 	// - nbf (Not Before)：生效时间
 	// - jti (JWT ID)：编号
+	//如下↓
 	jwtpkg.StandardClaims //
 }
 
@@ -129,7 +130,7 @@ func (jwt *JWT) RefreshToken(c *gin.Context) (string, error) {
 }
 
 // IssueToken 生成  Token，在登录成功时调用
-func (jwt *JWT) IssueToken(userID string, userName string) string {
+func (jwt *JWT) CreatToken(userID string, userName string) string {
 
 	// 1. 构造用户 claims 信息(负荷)
 	expireAtTime := jwt.expireAtTime()
@@ -160,7 +161,7 @@ func (jwt *JWT) IssueToken(userID string, userName string) string {
 func (jwt *JWT) createToken(claims JWTCustomClaims) (string, error) {
 	// 使用HS256算法进行token生成
 	token := jwtpkg.NewWithClaims(jwtpkg.SigningMethodHS256, claims)
-	return token.SignedString(jwt.SignKey)
+	return token.SignedString(jwt.SignKey) //生成jwt
 }
 
 // expireAtTime 过期时间
@@ -179,30 +180,30 @@ func (jwt *JWT) expireAtTime() int64 {
 func (jwt *JWT) parseTokenString(tokenString string) (*jwtpkg.Token, error) {
 	return jwtpkg.ParseWithClaims(tokenString, &JWTCustomClaims{}, func(token *jwtpkg.Token) (interface{}, error) {
 		return jwt.SignKey, nil
-	})
+	}) //ParseWithClaims函数传入jwt、载荷对象、密钥解密方法
 }
 
-/*parseTokenString 函数被调用来解析传入的 Token 字符串，
-并使用给定的密钥进行验证和解析。该函数使用 JWT 库的 ParseWithClaims
-方法进行解析，并传入一个自定义的声明结构 JWTCustomClaims，以及验证密
-钥 jwt.SignKey。
-ParseWithClaims 函数会验证 Token 的签名是否正确，
-并解析出 Token 中的声明信息，将其填充到 JWTCustomClaims 结构体中。如果 Token 有效且解析成功，
+/*并解析出 Token 中的声明信息，将其填充到 JWTCustomClaims 结构体中。如果 Token 有效且解析成功，
 函数会返回解析后的 Token 对象。
 解析后的 Token 对象，其中包含了 Token 的声明信息。
-这个 Token 对象可以用于后续的授权和身份验证操作。*/
+这个 Token 对象可以用于后续的授权和身份验证操作。
+
+
+jwt.Parse函数只负责解析令牌的结构，需要手动验证签名的有效性，
+而 jwt.ParseWithClaims 在解析令牌的同时也会验证签名的有效性，
+并将声明信息存储在指定的声明结构体中。*/
 
 // getTokenFromHeader 使用 jwtpkg.ParseWithClaims 解析 Token
 // Authorization:Bearer xxxxx
 func (jwt *JWT) getTokenFromHeader(c *gin.Context) (string, error) {
-	authHeader := c.Request.Header.Get("Authorization")
-	if authHeader == "" {
+	authHeader := c.Request.Header.Get("Authorization") //从authorization头中获得jwt
+	if authHeader == "" {                               //为空
 		return "", ErrHeaderEmpty
 	}
-	// 按空格分割
-	parts := strings.SplitN(authHeader, " ", 2)
+
+	parts := strings.SplitN(authHeader, " ", 2) // 获得的是"Bearer 'jwt'",所以我们现在只要得到jwt部分
 	if !(len(parts) == 2 && parts[0] == "Bearer") {
 		return "", ErrHeaderMalformed
 	}
-	return parts[1], nil
+	return parts[1], nil //返回jwt
 }

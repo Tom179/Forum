@@ -19,7 +19,7 @@ func SignupPhoneExist(data interface{}, c *gin.Context) map[string][]string {
 	//传入请求结构体，返回ValidateStruct函数
 	// 自定义验证规则
 	rules := govalidator.MapData{
-		"phone": []string{"required", "digits:11"},
+		"phone": []string{"required", "digits:11"}, //不为空的11位字符串
 	}
 
 	// 自定义验证出错时的提示

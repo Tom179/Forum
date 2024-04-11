@@ -16,7 +16,6 @@ func BcryptHash(password string) string {
 	if err != nil {
 		fmt.Println(err)
 	}
-
 	return string(bytes)
 }
 

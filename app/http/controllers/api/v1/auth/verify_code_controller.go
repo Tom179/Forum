@@ -24,14 +24,10 @@ func (vc *VerifyCodeController) ShowCaptcha(c *gin.Context) {
 		fmt.Println(err)
 	}
 	// 返回给用户
-	/*c.JSON(http.StatusOK, gin.H{
-		"captcha_id":    id,
-		"captcha_image": b64s,
-	})*/
 	response.JSON(c, gin.H{ //简单封装
 		"captcha_id":    id,
 		"captcha_image": b64s,
-	})
+	}) //返回的响应有base64编码，根据他就可以生成图片
 }
 
 // SendUsingEmail 发送 Email 验证码

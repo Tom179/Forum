@@ -11,7 +11,7 @@ import (
 // Attempt 尝试登录
 func Attempt(email string, password string) (user.User, error) {
 	userModel := user.GetByMulti(email)
-	if userModel.ID == 0 {
+	if userModel.ID == 0 { //GetByMulti未查询到
 		return user.User{}, errors.New("账号不存在")
 	}
 

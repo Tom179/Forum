@@ -22,9 +22,8 @@ func Validate(c *gin.Context, obj interface{}, handler ValidatorFunc) bool { //r
 		fmt.Println(err.Error())
 		return false
 	}
-
 	// 2. 表单验证
-	errs := handler(obj, c)
+	errs := handler(obj, c) //具体验证逻辑
 	// 3. 判断验证是否通过
 	if len(errs) > 0 {
 		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{
@@ -39,12 +38,12 @@ func Validate(c *gin.Context, obj interface{}, handler ValidatorFunc) bool { //r
 
 func validate(data interface{}, rules govalidator.MapData, messages govalidator.MapData) map[string][]string {
 
-	opts := govalidator.Options{
+	opts := govalidator.Options{ //定义要验证的数据、验证规则
 		Data:          data,
 		Rules:         rules,
-		TagIdentifier: "valid", // 模型中的 Struct 标签标识符
+		TagIdentifier: "valid", // 模型中的 Struct标签标识符
 		Messages:      messages,
 	}
-	// 开始验证
-	return govalidator.New(opts).ValidateStruct()
+
+	return govalidator.New(opts).ValidateStruct() // 开始验证
 }

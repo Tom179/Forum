@@ -22,7 +22,7 @@ func AuthJWT() gin.HandlerFunc { //从jwt中解析出用户信息写入c *Contex
 		}
 
 		// JWT 解析成功，设置用户信息
-		userModel := user.Get(claims.UserID)
+		userModel := user.Get(claims.UserID) //从token中获得用户ID!!!
 		if userModel.ID == 0 {
 			response.Unauthorized(c, "找不到对应用户，用户可能已删除")
 			return

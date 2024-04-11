@@ -27,7 +27,7 @@ func (lc *LoginController) LoginByPassword(c *gin.Context) {
 		response.Unauthorized(c, "账号不存在或密码错误")
 
 	} else {
-		token := jwt.NewJWT().IssueToken(user.GetStringID(), user.Name)
+		token := jwt.NewJWT().CreatToken(user.GetStringID(), user.Name)
 		response.JSON(c, gin.H{
 			"token": token,
 		})

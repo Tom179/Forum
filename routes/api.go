@@ -8,10 +8,13 @@ import (
 
 func RegistAPIRouters(r *gin.Engine) {
 	v1 := r.Group("v1")
-	v1.Use(MiddleWares.LimitIP("200-H"))
-
+	v1.GET("/hello", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"msg": "Air重载测试",
+		})
+	})
+	v1.Use(MiddleWares.LimitIP("200-H")) //全局中间件
 	{
-
 		authGroup := v1.Group("/auth") //认证组
 		{
 			suc := new(auth.SignupController) //创建对象，该对象封装了函数
@@ -35,5 +38,6 @@ func RegistAPIRouters(r *gin.Engine) {
 			//authGroup.POST("/password-reset/using-phone", pwc.ResetByPhone)
 			authGroup.POST("/password-reset/using-email", pwc.ResetByEmail)
 		}
+
 	}
 }

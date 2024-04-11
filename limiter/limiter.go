@@ -13,7 +13,7 @@ import (
 
 // GetKeyIP 获取 Limitor 的 Key，IP
 func GetKeyIP(c *gin.Context) string {
-	return c.ClientIP()
+	return c.ClientIP() //返回IP
 }
 
 // GetKeyRouteWithIP Limitor 的 Key，路由+IP，针对单个路由做限流
@@ -23,7 +23,6 @@ func GetKeyRouteWithIP(c *gin.Context) string {
 
 // CheckRate 检测请求是否超额
 func CheckRate(c *gin.Context, key string, formatted string) (limiterlib.Context, error) {
-
 	// 实例化依赖的 limiter 包的 limiter.Rate 对象
 	var context limiterlib.Context
 	rate, err := limiterlib.NewRateFromFormatted(formatted)
