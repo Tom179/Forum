@@ -5,8 +5,8 @@ import (
 	v1 "goWeb/app/http/controllers/api/v1"
 	"goWeb/app/models/user"
 	"goWeb/app/requests"
-	"goWeb/app/response"
 	"goWeb/jwt"
+	"goWeb/pkg/response"
 )
 
 type SignupController struct { //?继承自baseAPIController 有什么用？
@@ -14,7 +14,7 @@ type SignupController struct { //?继承自baseAPIController 有什么用？
 }
 
 func (sc *SignupController) IsPhoneExist(c *gin.Context) { //处理函数:需要三个验证
-
+	//panic("这是panic测试")
 	request := requests.SignupPhoneExistRequest{}
 
 	if ok := requests.Validate(c, &request, requests.SignupPhoneExist); !ok { //验证格式（c，..定义格式）

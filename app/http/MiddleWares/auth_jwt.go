@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"goWeb/app/models/user"
-	"goWeb/app/response"
 	"goWeb/jwt"
+	"goWeb/pkg/response"
 )
 
 func AuthJWT() gin.HandlerFunc { //从jwt中解析出用户信息写入c *Context中（一个公共的地方）

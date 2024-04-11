@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/thedevsaddam/govalidator"
-	"goWeb/app/response"
+	"goWeb/pkg/response"
 	"net/http"
 )
 

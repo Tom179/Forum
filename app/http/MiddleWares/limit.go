@@ -2,8 +2,8 @@ package MiddleWares
 
 import (
 	"fmt"
-	"goWeb/app/response"
 	"goWeb/limiter"
+	"goWeb/pkg/response"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

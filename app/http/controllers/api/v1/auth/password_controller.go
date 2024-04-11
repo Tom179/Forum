@@ -6,7 +6,7 @@ import (
 	v1 "goWeb/app/http/controllers/api/v1"
 	"goWeb/app/models/user"
 	"goWeb/app/requests"
-	"goWeb/app/response"
+	"goWeb/pkg/response"
 )
 
 // PasswordController 用户控制器

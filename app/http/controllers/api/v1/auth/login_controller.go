@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	v1 "goWeb/app/http/controllers/api/v1"
 	"goWeb/app/requests"
-	"goWeb/app/response"
 	"goWeb/jwt"
+	"goWeb/pkg/response"
 )
 
 type LoginController struct {
