@@ -1,7 +1,11 @@
 // Package helpers 存放辅助方法
 package helpers
 
-import "reflect"
+import (
+	"fmt"
+	"reflect"
+	"time"
+)
 
 // 判空？为什么要这样做？？      Empty 类似于 PHP 的 empty() 函数??
 func Empty(val interface{}) bool {
@@ -26,4 +30,8 @@ func Empty(val interface{}) bool {
 		return v.IsNil()
 	}
 	return reflect.DeepEqual(val, reflect.Zero(v.Type()).Interface()) //用于判断传入的值 val 是否等于其相同类型的零值
+}
+
+func MicrosecondsStr(elapsed time.Duration) string {
+	return fmt.Sprintf("%.3fms", float64(elapsed.Nanoseconds())/1e6)
 }
