@@ -1,8 +1,9 @@
-// Package captcha 处理图片验证码逻辑
+// Package captcha 处理图片验证码逻辑，调用别人的图片验证码api
 package captcha
 
 import (
 	"github.com/mojocn/base64Captcha"
+	"goWeb/pkg/config"
 	"goWeb/redis"
 	"sync"
 )
@@ -27,13 +28,13 @@ func NewCaptcha() *Captcha {
 			RedisClient: redis.Redis,
 			KeyPrefix:   "goWeb" + ":captcha:", //前缀，key的一部分
 		}
-		// 配置 base64Captcha 驱动信息：图片属性
+		// 配置 base64Captcha 驱动信息：图片属性,读取配置文件
 		driver := base64Captcha.NewDriverDigit(
-			80,  // 宽
-			240, // 高
-			6,   //长度
-			0.7, //数字的最大倾斜角度
-			80,  //图片背景里的混淆点数量
+			config.GetInt("captcha.height"),      // 宽
+			config.GetInt("captcha.width"),       // 高
+			config.GetInt("captcha.length"),      // 长度
+			config.GetFloat64("captcha.maxskew"), // 数字的最大倾斜角度
+			config.GetInt("captcha.dotcount"),    // 图片背景里的混淆点数量
 		)
 		// 实例化 base64Captcha 并赋值给内部使用的 internalCaptcha 对象
 		internalCaptcha.Base64Captcha = base64Captcha.NewCaptcha(driver, &store) //!!绑定验证码生成方式到redis中

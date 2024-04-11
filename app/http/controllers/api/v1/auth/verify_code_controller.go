@@ -6,7 +6,7 @@ import (
 	v1 "goWeb/app/http/controllers/api/v1"
 	"goWeb/app/requests"
 	"goWeb/app/response"
-	"goWeb/captcha"
+	"goWeb/pkg/captcha"
 	"goWeb/verifycode"
 )
 

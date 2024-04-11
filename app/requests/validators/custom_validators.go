@@ -2,7 +2,7 @@
 package validators
 
 import (
-	"goWeb/captcha"
+	"goWeb/pkg/captcha"
 	"goWeb/verifycode"
 )
 

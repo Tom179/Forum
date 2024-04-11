@@ -9,7 +9,7 @@ import (
 // RedisStore 实现 base64Captcha.Store interface
 type RedisStore struct {
 	RedisClient *redis.RedisClient
-	KeyPrefix   string
+	KeyPrefix   string //内置前缀
 }
 
 // Set 实现 base64Captcha.Store interface 的 Set 方法
