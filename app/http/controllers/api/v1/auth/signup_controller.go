@@ -40,6 +40,7 @@ func (sc *SignupController) IsEmailExist(c *gin.Context) {
 	/*c.JSON(http.StatusOK, gin.H{ //如果成功获取到请求，验证,传入一个string
 		"exist": user.IsEmailExist(request.Email), //查库
 	})*/
+
 	response.JSON(c, gin.H{
 		"exist": user.IsEmailExist(request.Email),
 	})

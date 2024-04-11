@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"goWeb/bootstrap"
-	btsConfig "goWeb/config" //init()
-	"goWeb/pkg/config"       //btsConfig和config的区别？这两个配置分别配置了什么信息？
+	_ "goWeb/config"
+	"goWeb/pkg/config" //btsConfig和config的区别？这两个配置分别配置了什么信息？
 )
 
 func init() {
 	// 为了调用root/config的init()函数，有必要吗？不是导包就行？
-	btsConfig.Initialize()
+	//btsConfig.Initialize()
 }
 
 func main() {
@@ -26,7 +26,7 @@ func main() {
 	config.InitConfig(env) //根据命令行传入的参数加载配置。（导入config包时调用init函数，新建viper对象，设置读取配置文件的类型、后缀等）
 	fmt.Println("读取配置文件")
 
-	prt := config.InternalGet("app.port")
+	prt := config.InternalGet("app.port") //证明viper中的多级配置，不论是yaml和map键值都可以通过'.'的方式来获取多级配置
 	fmt.Println("读取到的app.port为", prt)
 
 	r := gin.New()
@@ -41,7 +41,7 @@ func main() {
 	})*/
 	/*r.GET("/test_guest", MiddleWares.GuestJWT(), func(c *gin.Context) {
 		c.String(http.StatusOK, "Hello guest")
-	})*///中间件测试：游客身份，哪些路由只有游客才能访问，直接为其添加中间件即可。
+	})*/ //中间件测试：游客身份，哪些路由只有游客才能访问，直接为其添加中间件即可。
 	//fmt.Println(captcha.NewCaptcha().VerifyCaptcha("07d7ADH7Fn7cvV4Vf9nM", "743529")) //检测验证码函数
 
 	err := r.Run(":" + config.Get("app.port"))

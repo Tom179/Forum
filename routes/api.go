@@ -7,7 +7,7 @@ import (
 )
 
 func RegistAPIRouters(r *gin.Engine) {
-	v1 := r.Group("v1")
+	v1 := r.Group("/v1")
 	v1.GET("/hello", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"msg": "Air重载测试",

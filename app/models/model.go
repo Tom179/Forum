@@ -8,7 +8,7 @@ import (
 
 // BaseModel 模型基类
 type BaseModel struct {
-	ID uint64 `gorm:"column:id;primaryKey;autoIncrement;"json:"id,omitempty"` //绑定数据库字段、json格式
+	ID uint64 `gorm:"column:id;primaryKey;autoIncrement;" json:"id,omitempty"` //绑定数据库字段、json格式
 } //omitempty标签，该标签表示在将BaseModel结构体转换成JSON格式时，如果ID属性值为空，则不会将该属性输出
 
 // CommonTimestampsField 时间戳
