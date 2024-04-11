@@ -1,7 +1,7 @@
 package MiddleWares
 
 import (
-	"goWeb/jwt"
+	"goWeb/pkg/jwt"
 	"goWeb/pkg/response"
 
 	"github.com/gin-gonic/gin"

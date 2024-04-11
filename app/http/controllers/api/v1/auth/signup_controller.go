@@ -5,7 +5,7 @@ import (
 	v1 "goWeb/app/http/controllers/api/v1"
 	"goWeb/app/models/user"
 	"goWeb/app/requests"
-	"goWeb/jwt"
+	"goWeb/pkg/jwt"
 	"goWeb/pkg/response"
 )
 
@@ -46,16 +46,20 @@ func (sc *SignupController) IsEmailExist(c *gin.Context) {
 	})
 }
 
-/*
- */
 // SignupUsingEmail 使用 Email + 验证码进行注册
 func (sc *SignupController) SignupUsingEmail(c *gin.Context) {
 
+	// 1. 验证表单
 	request := requests.SignupUsingEmailRequest{}
-
-	if ok := requests.Validate(c, &request, requests.SignupUsingEmail); !ok { // 1. 验证表单
+	if ok := requests.Validate(c, &request, requests.SignupUsingEmail); !ok {
 		return
 	}
+
+	if user.IsEmailExist(request.Email) {
+		response.Unauthorized(c, "邮箱已存在，注册失败")
+		return
+	}
+
 	// 2. 验证成功，创建数据
 	userModel := user.User{
 		Name:     request.Name,
@@ -63,9 +67,9 @@ func (sc *SignupController) SignupUsingEmail(c *gin.Context) {
 		Password: request.Password,
 	}
 	userModel.Create()
-	//jwt
+
 	if userModel.ID > 0 {
-		token := jwt.NewJWT().CreatToken(userModel.GetStringID(), userModel.Name) //jwt
+		token := jwt.NewJWT().IssueToken(userModel.GetStringID(), userModel.Name)
 		response.CreatedJSON(c, gin.H{
 			"token": token,
 			"data":  userModel,

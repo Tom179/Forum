@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"goWeb/app/models/user"
-	"goWeb/jwt"
+	"goWeb/pkg/jwt"
 	"goWeb/pkg/response"
 )
 

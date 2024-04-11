@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	v1 "goWeb/app/http/controllers/api/v1"
 	"goWeb/app/requests"
-	"goWeb/jwt"
+	"goWeb/pkg/jwt"
 	"goWeb/pkg/response"
 )
 
@@ -27,7 +27,7 @@ func (lc *LoginController) LoginByPassword(c *gin.Context) {
 		response.Unauthorized(c, "账号不存在或密码错误")
 
 	} else {
-		token := jwt.NewJWT().CreatToken(user.GetStringID(), user.Name)
+		token := jwt.NewJWT().IssueToken(user.GetStringID(), user.Name)
 		response.JSON(c, gin.H{
 			"token": token,
 		})
