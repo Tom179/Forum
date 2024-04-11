@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	v1 "goWeb/app/http/controllers/api/v1"
 	"goWeb/app/requests"
+	"goWeb/pkg/auth"
 	"goWeb/pkg/jwt"
 	"goWeb/pkg/response"
 )
@@ -21,7 +22,7 @@ func (lc *LoginController) LoginByPassword(c *gin.Context) {
 	}
 
 	// 2. 尝试登录
-	user, err := Attempt(request.LoginID, request.Password)
+	user, err := auth.Attempt(request.LoginID, request.Password)
 	if err != nil {
 		// 失败，显示错误提示
 		response.Unauthorized(c, "账号不存在或密码错误")

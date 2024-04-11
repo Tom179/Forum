@@ -4,9 +4,13 @@ import (
 	"flag"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"goWeb/app/http/MiddleWares"
 	"goWeb/bootstrap"
 	_ "goWeb/config"
+	"goWeb/pkg/auth"
 	"goWeb/pkg/config" //btsConfig和config的区别？这两个配置分别配置了什么信息？
+	"goWeb/pkg/response"
+	"net/http"
 )
 
 func init() {
@@ -37,14 +41,14 @@ func main() {
 	bootstrap.SetupRedis()  //初始化redis
 	bootstrap.SetupRoute(r) //初始化路由，包括中间件
 
-	/*r.GET("/test_auth", MiddleWares.AuthJWT(), func(c *gin.Context) { //中间件测试
+	r.GET("/test_auth", MiddleWares.AuthJWT(), func(c *gin.Context) { //中间件测试
 		userModel := auth.CurrentUser(c)
 		response.Data(c, userModel)
-	    //中间件测试：登录身份，哪些路由需要授权才能访问，直接为其添加中间件即可
-	})*/
-	/*r.GET("/test_guest", MiddleWares.GuestJWT(), func(c *gin.Context) {
+		//中间件测试：登录身份，哪些路由需要授权才能访问，直接为其添加中间件即可
+	})
+	r.GET("/test_guest", MiddleWares.GuestJWT(), func(c *gin.Context) {
 		c.String(http.StatusOK, "Hello guest")
-	})*/ //中间件测试：游客身份，哪些路由只有游客才能访问，直接为其添加中间件即可。
+	}) //中间件测试：游客身份，哪些路由只有游客才能访问，直接为其添加中间件即可。
 	//fmt.Println(captcha.NewCaptcha().VerifyCaptcha("07d7ADH7Fn7cvV4Vf9nM", "743529")) //检测验证码函数
 
 	err := r.Run(":" + config.Get("app.port"))

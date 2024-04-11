@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"goWeb/app/models/user"
+	"goWeb/pkg/config"
 	"goWeb/pkg/jwt"
 	"goWeb/pkg/response"
 )
@@ -17,7 +18,7 @@ func AuthJWT() gin.HandlerFunc { //从jwt中解析出用户信息写入c *Contex
 
 		// JWT 解析失败，有错误发生
 		if err != nil {
-			response.Unauthorized(c, fmt.Sprintf("错误，请查看 %v 相关的接口认证文档", "goWeb"))
+			response.Unauthorized(c, fmt.Sprintf("错误，请查看 %v 相关的接口认证文档", config.Get("app.name")))
 			return
 		}
 
