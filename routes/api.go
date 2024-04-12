@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 	"goWeb/app/http/MiddleWares"
+	controllers "goWeb/app/http/controllers/api/v1"
 	"goWeb/app/http/controllers/api/v1/auth"
 )
 
@@ -13,7 +14,7 @@ func RegistAPIRouters(r *gin.Engine) {
 			"msg": "Air重载测试",
 		})
 	})
-	v1.Use(MiddleWares.LimitIP("200-H")) //全局中间件
+	v1.Use(MiddleWares.LimitIP("200-H")) //全局中间件:每小时200个请求？
 	{
 		authGroup := v1.Group("/auth") //认证组
 		{
@@ -32,11 +33,24 @@ func RegistAPIRouters(r *gin.Engine) {
 			authGroup.POST("/login/using-password", lgc.LoginByPassword)
 
 			authGroup.POST("/login/refresh-token", lgc.RefreshToken)
-			
+
 			// 重置密码
 			pwc := new(auth.PasswordController)
 			//authGroup.POST("/password-reset/using-phone", pwc.ResetByPhone)
 			authGroup.POST("/password-reset/using-email", pwc.ResetByEmail)
+
+			uc := new(controllers.UsersController)
+			// 获取当前用户
+			v1.GET("/user", MiddleWares.AuthJWT(), uc.CurrentUser)
+			usersGroup := v1.Group("/users")
+			{
+				usersGroup.GET("", uc.Index)
+			}
+			v1.GET("/testIp", func(context *gin.Context) {
+				ip := context.ClientIP()
+				context.JSON(200, gin.H{"": context.FullPath() + ip})
+			})
+
 		}
 
 	}

@@ -1,8 +1,9 @@
 package MiddleWares
 
 import (
-	"fmt"
-	"goWeb/limiter"
+	"goWeb/pkg/app"
+	"goWeb/pkg/limiter"
+	"goWeb/pkg/logger"
 	"goWeb/pkg/response"
 	"net/http"
 
@@ -18,10 +19,10 @@ import (
 // * 1000 reqs/hour: "1000-H"
 // * 2000 reqs/day: "2000-D"
 func LimitIP(limit string) gin.HandlerFunc {
-	/*	if app.IsTesting() {
+	if app.IsTesting() { //测试环境config
 		limit = "1000000-H"
-		}
-	*/
+	}
+
 	return func(c *gin.Context) {
 		// 针对 IP 限流
 		key := limiter.GetKeyIP(c)
@@ -34,9 +35,9 @@ func LimitIP(limit string) gin.HandlerFunc {
 
 // LimitPerRoute 限流中间件，用在单独的路由中
 func LimitPerRoute(limit string) gin.HandlerFunc {
-	//if app.IsTesting() {
-	limit = "1000000-H"
-	//}
+	if app.IsTesting() {
+		limit = "1000000-H"
+	}
 	return func(c *gin.Context) {
 
 		// 针对单个路由，增加访问次数
@@ -54,10 +55,9 @@ func LimitPerRoute(limit string) gin.HandlerFunc {
 func limitHandler(c *gin.Context, key string, limit string) bool {
 
 	// 获取超额的情况
-	rate, err := limiter.CheckRate(c, key, limit)
+	rate, err := limiter.CheckRate(c, key, limit) //输出流量是否超额的状态信息
 	if err != nil {
-		//logger.LogIf(err)
-		fmt.Println(err)
+		logger.LogIf(err)
 		response.Abort500(c)
 		return false
 	}
@@ -68,7 +68,7 @@ func limitHandler(c *gin.Context, key string, limit string) bool {
 	// X-RateLimit-Reset :1513784506 到该时间点，访问次数会重置为 X-RateLimit-Limit
 	c.Header("X-RateLimit-Limit", cast.ToString(rate.Limit))
 	c.Header("X-RateLimit-Remaining", cast.ToString(rate.Remaining))
-	c.Header("X-RateLimit-Reset", cast.ToString(rate.Reset)) //rate.Reset表示限流的重置时间点，也就是在这个时间点后，限流计数会重新开始。
+	c.Header("X-RateLimit-Reset", cast.ToString(rate.Reset))
 
 	// 超额
 	if rate.Reached {

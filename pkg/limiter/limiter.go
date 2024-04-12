@@ -2,18 +2,19 @@
 package limiter
 
 import (
-	"fmt"
+	"goWeb/pkg/config"
+	"goWeb/pkg/logger"
 	"goWeb/pkg/redis"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	limiterlib "github.com/ulule/limiter/v3"
-	sredis "github.com/ulule/limiter/v3/drivers/store/redis" //用的是v9版本，但是我自己用的是v8
+	sredis "github.com/ulule/limiter/v3/drivers/store/redis"
 )
 
 // GetKeyIP 获取 Limitor 的 Key，IP
 func GetKeyIP(c *gin.Context) string {
-	return c.ClientIP() //返回IP
+	return c.ClientIP()
 }
 
 // GetKeyRouteWithIP Limitor 的 Key，路由+IP，针对单个路由做限流
@@ -22,32 +23,31 @@ func GetKeyRouteWithIP(c *gin.Context) string {
 }
 
 // CheckRate 检测请求是否超额
-func CheckRate(c *gin.Context, key string, formatted string) (limiterlib.Context, error) {
+func CheckRate(c *gin.Context, key string, formatted string) (limiterlib.Context, error) { //formatted表示xxx-M格式化的频率字符串
+
 	// 实例化依赖的 limiter 包的 limiter.Rate 对象
 	var context limiterlib.Context
 	rate, err := limiterlib.NewRateFromFormatted(formatted)
 	if err != nil {
-		//logger.LogIf(err)
-		fmt.Println(err)
+		logger.LogIf(err)
 		return context, err
 	}
 
 	// 初始化存储，使用我们程序里共用的 redis.Redis 对象
 	store, err := sredis.NewStoreWithOptions(redis.Redis.Client, limiterlib.StoreOptions{
 		// 为 limiter 设置前缀，保持 redis 里数据的整洁
-		Prefix: "goWeb" + ":limiter",
+		Prefix: config.GetString("app.name") + ":limiter",
 	})
 	if err != nil {
-		//logger.LogIf(err)
-		println(err)
+		logger.LogIf(err)
 		return context, err
 	}
 
 	// 使用上面的初始化的 limiter.Rate 对象和存储对象
-	limiterObj := limiterlib.New(store, rate)
+	limiterObj := limiterlib.New(store, rate) //创建限流器！！
 
 	// 获取限流的结果
-	if c.GetBool("limiter-once") {
+	if c.GetBool("limiter-once") { //已经进行过一次限流判断
 		// Peek() 取结果，不增加访问次数
 		return limiterObj.Peek(c, key)
 	} else {

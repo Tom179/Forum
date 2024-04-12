@@ -1,7 +1,7 @@
 package user
 
 import (
-	"goWeb/Hash"
+	"goWeb/pkg/Hash"
 
 	"gorm.io/gorm"
 )

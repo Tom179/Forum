@@ -1,8 +1,8 @@
 package user
 
 import (
-	"goWeb/Hash"
 	"goWeb/app/models"
+	"goWeb/pkg/Hash"
 	"goWeb/pkg/database"
 )
 
