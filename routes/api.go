@@ -46,10 +46,20 @@ func RegistAPIRouters(r *gin.Engine) {
 			{
 				usersGroup.GET("", uc.Index)
 			}
+
 			v1.GET("/testIp", func(context *gin.Context) {
 				ip := context.ClientIP()
 				context.JSON(200, gin.H{"": context.FullPath() + ip})
 			})
+			cgc := new(controllers.CategoriesController)
+			cgcGroup := v1.Group("/categories")
+			{
+				cgcGroup.GET("", cgc.Index)
+
+				cgcGroup.POST("", MiddleWares.AuthJWT(), cgc.Store)
+				cgcGroup.PUT("/:id", MiddleWares.AuthJWT(), cgc.Update)
+				cgcGroup.DELETE("/:id", MiddleWares.AuthJWT(), cgc.Delete)
+			}
 
 		}
 

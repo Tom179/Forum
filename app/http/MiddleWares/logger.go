@@ -65,7 +65,7 @@ func Logger() gin.HandlerFunc {
 			logFields = append(logFields, zap.String("Response Body", w.body.String()))
 		}
 
-		if responStatus > 400 && responStatus <= 499 {
+		if responStatus > 400 && responStatus <= 499 { //这个范围内的状态码通常表示客户端请求存在问题，例如请求的内容不完整、格式不正确
 			// 除了 StatusBadRequest 以外，warning 提示一下，常见的有 403 404，开发时都要注意
 			logger.Warn("HTTP Warning "+cast.ToString(responStatus), logFields...)
 		} else if responStatus >= 500 && responStatus <= 599 {

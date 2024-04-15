@@ -33,7 +33,7 @@ func Recovery() gin.HandlerFunc {
 						}
 					}
 				}
-				// 链接中断的情况
+				// 连接中断的情况
 				if brokenPipe {
 					logger.Error(c.Request.URL.Path,
 						zap.Time("time", time.Now()),

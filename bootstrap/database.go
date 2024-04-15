@@ -2,6 +2,7 @@ package bootstrap
 
 import (
 	"fmt"
+	"goWeb/app/models/category"
 	"goWeb/app/models/user"
 	"goWeb/pkg/config"
 	"goWeb/pkg/database"
@@ -34,6 +35,8 @@ func SetupDB() { //请换为用配置文件的形式
 	// 连接数据库，并设置 GORM 的日志模式
 	database.Connect(dbConfig, logger.NewGormLogger()) /*logger.Default.LogMode(logger.Info)更换自定义*/ //给DB赋值，之后再访问DataBase包的时候可以直接使用DB
 	database.DB.AutoMigrate(&user.User{})              //自动建表，填入多个参数同样能一次性建多个表
+	database.DB.AutoMigrate(&category.Category{})
+	//多个表每次都写成AotoMigrate这样是不是不好
 
 	database.SQLDB.SetMaxOpenConns(10)                               // 设置最大连接数
 	database.SQLDB.SetMaxIdleConns(5)                                // 设置最大空闲连接数

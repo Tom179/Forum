@@ -126,7 +126,7 @@ func Dump(value interface{}, msg ...string) {
 // LogIf 当 err != nil 时记录 error 等级的日志
 func LogIf(err error) {
 	if err != nil {
-		Logger.Error("Error Occurred:", zap.Error(err))
+		Logger.Error("Error Occurred:", zap.Error(err)) // zap.Error() 方法将错误对象 err 转换为一个字段，该字段会包含错误的详细信息和堆栈跟踪。
 	}
 }
 

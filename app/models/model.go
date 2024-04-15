@@ -1,4 +1,4 @@
-// Package models 模型通用属性和方法
+// Package category 模型通用属性和方法
 package models
 
 import (
