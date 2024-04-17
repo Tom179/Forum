@@ -60,8 +60,17 @@ func RegistAPIRouters(r *gin.Engine) {
 				cgcGroup.PUT("/:id", MiddleWares.AuthJWT(), cgc.Update)
 				cgcGroup.DELETE("/:id", MiddleWares.AuthJWT(), cgc.Delete)
 			}
+			tpc := new(controllers.TopicsController)
+			tpcGroup := v1.Group("/topics")
+			{
+				tpcGroup.GET("", tpc.Index)
+				tpcGroup.GET("/:id", tpc.Show)
+				tpcGroup.GET("/search", tpc.Search)
+				tpcGroup.POST("", MiddleWares.AuthJWT(), tpc.Store)
+				tpcGroup.PUT("/:id", MiddleWares.AuthJWT(), tpc.Update)
+				tpcGroup.DELETE("/:id", MiddleWares.AuthJWT(), tpc.Delete)
 
+			}
 		}
-
 	}
 }

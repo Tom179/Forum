@@ -8,10 +8,10 @@ import (
 
 type User struct { //结构体大写！！
 	models.BaseModel
-	Name     string `json:"name,omitempty"`
-	Email    string `json:"-"`
-	Phone    string `json:"-"`
-	Password string `json:"-"` //"-"这是在指示 JSON 解析器忽略字段 。后面接口返回用户数据时候，这三个字段都会被隐藏。
+	Name     string `json:"name,omitempty" gorm:"type:varchar(255);not null;index"`
+	Email    string `json:"-" gorm:"type:varchar(255);not null"`
+	Phone    string `json:"-" gorm:"type:varchar(255);not null"`
+	Password string `json:"-" gorm:"type:varchar(255);not null"` //"-"这是在指示 JSON 解析器忽略字段 。后面接口返回用户数据时候，这三个字段都会被隐藏。
 
 	models.CommonTimestampsField
 
